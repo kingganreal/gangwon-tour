@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#F7F6F2">
+<meta name="description" content="강원 여행 코스, 위치 방문 인증, 캐릭터 포획과 여행 앨범을 한곳에서 즐기는 강원도감">
 <title>강원도감</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
@@ -89,16 +91,31 @@ main::-webkit-scrollbar{display:none}
 .notice .ic{color:var(--clay);margin-top:1px}
 .notice .nt{flex:1;font-size:.76rem;font-weight:600;line-height:1.5;color:var(--ink-2)}
 .notice .nl{font-size:.58rem;font-weight:800;letter-spacing:.1em;color:var(--sub);margin-bottom:3px}
+.locBtn{font-size:.68rem;font-weight:800;color:var(--pine);border-bottom:1.5px solid var(--pine);padding:2px 0;flex-shrink:0}
+.locBtn[disabled]{color:var(--sub);border-color:var(--line-2);cursor:default}
+.liveBar{display:flex;align-items:stretch;border-bottom:1px solid var(--line);min-height:66px}
+.liveTime{display:flex;flex-direction:column;justify-content:center;min-width:104px;padding:11px 14px 11px 0;border-right:1px solid var(--line)}
+.liveTime span{font-size:.61rem;color:var(--sub);font-weight:700;letter-spacing:.04em}
+.liveTime b{font-size:1.26rem;line-height:1.15;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.035em;margin-top:3px}
+.liveWeather{flex:1;display:flex;align-items:center;gap:10px;padding:10px 0 10px 14px;text-align:left;min-width:0}
+.liveWeather:active{opacity:.7}
+.weatherMark{width:32px;height:32px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;color:var(--clay);font-size:1rem;flex-shrink:0}
+.weatherCopy{min-width:0;display:grid;grid-template-columns:auto 1fr;align-items:baseline;column-gap:7px}
+.weatherCopy b{font-size:.9rem;font-weight:800;font-variant-numeric:tabular-nums}
+.weatherCopy small{font-size:.66rem;color:var(--ink-2);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weatherCopy em{grid-column:1/-1;font-size:.57rem;color:var(--sub);font-style:normal;margin-top:3px}
 .mapBlock{padding:6px 0 0}
 .mapTop{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
 .mapTop b{font-size:.86rem;font-weight:800}
 .mapTop .st{margin-left:auto;font-size:.7rem;font-weight:700;color:var(--sub)}
-#gwMap{width:100%}
-.rg{fill:#EAE8DF;stroke:var(--paper);stroke-width:2.5;stroke-linejoin:round}
-#rgChun{fill:var(--pine);cursor:pointer;transition:.2s}
-#rgChun:active{fill:var(--pine-2)}
-.mLabel{font-size:9.5px;fill:#ADB2AB;font-weight:700;pointer-events:none;letter-spacing:-.02em}
-.mLabel.on{fill:#fff;font-size:11px;font-weight:800}
+#gwMap{width:100%;max-height:307px}
+.rg{fill:#EAE8DF;stroke:var(--paper);stroke-width:4;stroke-linejoin:round;transition:fill .25s,stroke .25s}
+.rg.available{fill:#DDE9E3;stroke:var(--pine);stroke-width:3;cursor:pointer}
+.rg.available:active{fill:#CFDFD7}
+.rg.captured{fill:var(--pine);stroke:var(--paper);cursor:pointer}
+.mLabel{font-size:16px;fill:#9EA59F;font-weight:700;pointer-events:none;letter-spacing:-.03em;text-anchor:middle}
+.mLabel.available{fill:var(--pine);font-weight:800}
+.mLabel.captured{fill:#fff;font-weight:800}
 #pin{cursor:pointer}
 #pinBody{opacity:.3;transition:.35s}
 #pinBody.found{opacity:1}
@@ -167,6 +184,11 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
 .stop .sm{font-size:.7rem;color:var(--sub);margin-top:4px;line-height:1.6}
 .stampBtn{font-size:.7rem;font-weight:800;color:var(--ink);border-bottom:1.5px solid var(--ink);padding:0 0 2px;flex-shrink:0;margin-top:3px}
 .stampBtn.done{color:var(--sub);border-color:transparent}
+.stampBtn[disabled]:not(.done){color:var(--sub);border-color:var(--line-2);cursor:default}
+.geoCard{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.geoCard .gi{width:30px;height:30px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;color:var(--pine);flex-shrink:0}
+.geoCard b{font-size:.78rem;display:block}
+.geoCard p{font-size:.68rem;color:var(--sub);line-height:1.45;margin-top:2px}
 .back{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:800;color:var(--sub);padding:18px 0 6px;letter-spacing:.02em}
 
 /* ---------- 도감 ---------- */
@@ -197,6 +219,12 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
 .albumGrid .ph{aspect-ratio:1;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--pine);padding:6px}
 .albumGrid .ph small{font-size:.56rem;font-weight:700;color:var(--sub);text-align:center;line-height:1.25}
 .albumGrid .ph.empty{border-style:dashed;color:var(--line-2)}
+.albumGrid button.ph{width:100%;font-family:inherit}
+.albumGrid .ph.photo{padding:0;position:relative;overflow:hidden;background:#111}
+.albumGrid .ph.photo img{width:100%;height:100%;object-fit:cover}
+.albumGrid .ph.photo small{position:absolute;left:5px;right:5px;bottom:5px;padding:4px 5px;background:rgba(20,28,34,.72);color:#fff;text-align:left}
+.albumTools{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.albumTools p{flex:1;margin:0}
 .rwd{display:flex;align-items:center;gap:14px;padding:17px 0;border-bottom:1px solid var(--line)}
 .rwd:last-of-type{border-bottom:none}
 .rwd .ri{width:40px;height:40px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink-2)}
@@ -263,6 +291,20 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
 #hitDots i{width:26px;height:3px;background:rgba(29,74,62,.2)}
 #hitDots i.on{background:var(--pine)}
 #catchX{position:absolute;top:26px;right:22px;width:32px;height:32px;border:1px solid var(--line-2);background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:4}
+
+/* ---------- 앨범 카메라 ---------- */
+#cameraOv{position:absolute;inset:0;z-index:23;display:none;background:var(--night);color:#fff;flex-direction:column}
+#cameraOv.show{display:flex}
+.cameraTop{height:70px;padding:20px 22px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.16)}
+.cameraTop b{font-size:.88rem}
+.cameraTop span{font-size:.68rem;color:#B8C0BB}
+#cameraX{margin-left:auto;width:34px;height:34px;border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;color:#fff}
+#cameraVideo{width:100%;flex:1;min-height:0;object-fit:cover;background:#070A09}
+.cameraBottom{height:112px;display:flex;align-items:center;justify-content:center;position:relative}
+#cameraShot{width:62px;height:62px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center}
+#cameraShot::after{content:'';width:46px;height:46px;border-radius:50%;background:#fff}
+.cameraHint{position:absolute;left:22px;right:22px;bottom:11px;text-align:center;font-size:.64rem;color:#AEB7B1}
+.albumPreview{width:100%;max-height:300px;object-fit:cover;margin-bottom:14px;border:1px solid var(--line)}
 
 /* ---------- 모달/토스트 ---------- */
 #modal{position:absolute;inset:0;background:rgba(18,28,22,.42);z-index:24;display:none;align-items:flex-end;justify-content:center}
@@ -340,7 +382,7 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
     <div class="mark"><svg class="ic"><use href="#i-mark"/></svg></div>
     <div class="wordmark"><b>강원도감</b><span>Chuncheon Demo</span></div>
     <div class="hRight">
-      <button id="modeBtn" onclick="toggleNight()"><svg class="ic sm" id="modeIc"><use href="#i-sun"/></svg><span id="modeTxt">주간</span></button>
+      <div id="modeBtn" role="status" aria-live="polite"><svg class="ic sm" id="modeIc"><use href="#i-sun"/></svg><span id="modeTxt">주간</span></div>
       <div class="ptBox"><b id="ptNum">0</b><span>POINT</span></div>
     </div>
   </header>
@@ -348,42 +390,77 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
   <main id="main">
     <!-- ============ 홈 ============ -->
     <section class="screen active" id="scr-home">
-      <div class="notice">
-        <svg class="ic sm"><use href="#i-alert"/></svg>
-        <div class="nt"><div class="nl" id="alertLabel">기상 정보</div><span id="alertTxt"></span></div>
+      <div class="liveBar" aria-label="실시간 여행 정보">
+        <div class="liveTime" role="status" aria-live="polite">
+          <span id="liveDate">날짜 확인 중</span>
+          <b id="liveClock">--:--</b>
+        </div>
+        <button class="liveWeather" id="weatherBtn" onclick="fetchWeather(true)" aria-label="현재 날씨 새로고침">
+          <span class="weatherMark" id="weatherMark">·</span>
+          <span class="weatherCopy">
+            <b id="weatherTemp">--°</b>
+            <small id="weatherDesc">춘천 날씨 확인 중</small>
+            <em id="weatherMeta">누르면 새로고침</em>
+          </span>
+        </button>
+      </div>
+      <div class="notice" id="geoNotice">
+        <svg class="ic sm"><use href="#i-pin"/></svg>
+        <div class="nt"><div class="nl" id="geoLabel">위치 기반 방문 인증</div><span id="geoTxt">위치를 허용하면 정류장 250m 안에서 방문 인증이 활성화됩니다.</span></div>
+        <button class="locBtn" id="geoBtn" onclick="requestLocation()">위치 허용</button>
       </div>
 
       <div class="mapBlock">
         <div class="mapTop"><b>강원 캐릭터 분포도</b><span class="st" id="mapStat"></span></div>
-        <svg id="gwMap" viewBox="0 0 360 292" xmlns="http://www.w3.org/2000/svg">
-          <path class="rg" d="M20,60 L80,40 L95,85 L60,110 L18,95 Z"/>
-          <path class="rg" d="M80,40 L150,30 L160,75 L95,85 Z"/>
-          <path class="rg" d="M150,30 L225,25 L235,70 L160,75 Z"/>
-          <path class="rg" d="M225,25 L310,35 L320,95 L235,70 Z"/>
-          <path id="rgChun" class="rg" d="M60,110 L95,85 L160,75 L170,130 L115,155 L65,140 Z" onclick="goCourseList()"/>
-          <path class="rg" d="M170,130 L235,70 L320,95 L330,150 L240,165 L175,160 Z"/>
-          <path class="rg" d="M65,140 L115,155 L110,205 L45,195 Z"/>
-          <path class="rg" d="M115,155 L175,160 L240,165 L235,215 L150,225 L110,205 Z"/>
-          <path class="rg" d="M240,165 L330,150 L340,225 L255,240 L235,215 Z"/>
-          <path class="rg" d="M45,195 L110,205 L150,225 L140,270 L55,260 Z"/>
-          <path class="rg" d="M150,225 L235,215 L255,240 L245,285 L145,275 L140,270 Z"/>
-          <text class="mLabel on" x="98" y="126">춘천</text>
-          <text class="mLabel" x="41" y="80">철원</text><text class="mLabel" x="109" y="58">화천</text>
-          <text class="mLabel" x="181" y="52">양구</text><text class="mLabel" x="256" y="62">인제·고성</text>
-          <text class="mLabel" x="237" y="120">속초·양양</text><text class="mLabel" x="75" y="180">홍천</text>
-          <text class="mLabel" x="159" y="196">평창·횡성</text><text class="mLabel" x="269" y="200">강릉·정선</text>
-          <text class="mLabel" x="83" y="238">원주</text><text class="mLabel" x="179" y="256">영월·태백</text>
-          <g id="pin" onclick="openDex('char')">
-            <circle cx="118" cy="104" r="15" fill="#F7F6F2" stroke="#1D4A3E" stroke-width="1.5"/>
-            <g id="pinBody" transform="translate(106,92) scale(0.375)" style="color:#1D4A3E">
+        <svg id="gwMap" viewBox="0 0 800 699" xmlns="http://www.w3.org/2000/svg">
+          <!-- 통계청 SGIS 기반 경계: statgarten/maps (MIT) -->
+          <path id="region-gangneung" class="rg" data-region="강릉시" d="M 621.92 339.1 623.66 345.34 646.72 368.5 654.84 377.53 661.67 383.14 664.33 389.43 672.16 398.91 685.57 411.26 686.25 418.6 682.03 427.6 685.54 435.15 692.93 442.32 684.76 455.03 683.58 468.21 680.38 466.9 673.61 472.06 666.55 470.17 662.45 474.07 657.75 474.32 653.96 470.22 643.42 472.28 640.27 468.7 633.83 466.34 633.73 459.94 630.8 451.33 626.46 448.66 622.26 450.14 618.93 456.58 617.46 472.28 614.08 483 602.78 488.13 596.02 482 593.48 472.84 583.33 471.97 574.53 469.52 569.61 475.07 564.07 476.34 559.48 472.42 553.96 459.82 555.58 449.2 566.97 449.26 569.22 441.31 573.98 441.94 573.62 433.57 571.03 429.53 572.64 422.08 577.41 416.82 583.64 413.63 577.33 395.79 575.75 383.73 569.24 380.25 563.36 372.13 552.94 370.12 550.02 372.82 537.35 366.61 533.44 371.82 528.82 373.37 525.59 366.73 524.94 354.59 518.83 349.11 518.36 341.89 520.48 331.13 525.04 327.24 531.89 326.44 532.83 322.82 539.54 316.39 548.08 320.32 565.97 312.3 570.84 313.78 575.75 309.6 597.89 305.61 606.52 313.48 605.18 320.25 614.52 332 621.92 339.1 Z" role="button" tabindex="0" aria-label="강릉시" onclick="selectRegion('강릉시','gangneung')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('강릉시','gangneung')"/>
+          <path id="region-goseong" class="rg" data-region="고성군" d="M 517.49 168.23 511.71 173 499.71 175.04 495.69 178.74 487.76 181.19 483.19 187.28 476.88 183.31 467.91 180.73 466.27 176.17 466.45 165.08 459.07 158.47 454.34 163.7 448.29 161.77 441.08 164.16 437.49 153.25 430.98 154.83 424.22 151.74 425.04 138.48 420.84 129.33 422.02 125.1 413.4 120.98 408.85 123.04 405.38 115.96 408.12 109.71 407.05 105.1 399.74 107.53 393.32 105.04 391.9 99.26 398.63 88.22 411.68 78.07 416.87 63.08 418.67 49.12 421.69 44.79 420.72 33.85 420.38 10.63 429.62 5.25 431.44 1.48 437.16 1 441.02 8.82 449.48 19.61 452.27 21.36 453.44 30.28 458.29 39.53 458.27 44.69 465.99 60.58 475.36 71.79 470.94 77.19 478.78 91.61 491.69 107.61 489.87 111.06 491.77 117.05 497.4 123.51 497.57 128.65 503.84 135.13 504.62 143.94 508.74 156.32 517.49 168.23 Z" role="button" tabindex="0" aria-label="고성군" onclick="selectRegion('고성군','goseong')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('고성군','goseong')"/>
+          <path id="region-donghae" class="rg" data-region="동해시" d="M 705.98 452.37 709.65 463.64 706.48 466.6 710.53 480.03 723.78 498.85 715.31 508.77 701.37 504.68 693.74 507.96 684.63 507.82 673 516.11 669.43 521.39 659.33 518.8 652.8 512.88 655.16 508.02 662.18 502.23 663.82 495.98 662.23 492.22 653.53 483.73 657.75 474.32 662.45 474.07 666.55 470.17 673.61 472.06 680.38 466.9 683.58 468.21 684.76 455.03 692.93 442.32 705.98 452.37 Z" role="button" tabindex="0" aria-label="동해시" onclick="selectRegion('동해시','donghae')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('동해시','donghae')"/>
+          <path id="region-samcheok" class="rg" data-region="삼척시" d="M 723.78 498.85 733.24 506.79 734.51 516.35 737.6 525.08 746.4 533.59 757.65 541.2 756.77 547.94 762.63 556.65 764.16 566.45 770.73 571.51 774.82 578.62 785.28 585.48 784.76 591.57 792.26 598.7 789.8 609.93 792.16 614.09 790.72 619.29 792.48 629.78 798.55 643.06 791.72 643.31 777.46 651.44 774.29 657.63 766.01 656.89 764.15 663.22 758.32 665.98 750.13 676.04 752.95 689.03 743.16 688.87 739.55 690.85 727.65 678.6 711.97 668.31 704.01 665.09 701.2 659.25 703.62 648.26 701.07 639.56 695.93 638.98 695.07 634.49 687.8 634.6 675.44 629.72 669.9 620.14 669.33 613.69 670.98 606.07 666.81 606.07 670.99 593.19 674.01 588.46 670.2 582.55 675.24 575.78 667.96 566.45 672.97 561 671.35 557.26 664.72 561.9 658.3 562.39 648.7 575.3 648.09 586.87 643.93 592.13 646.32 601.92 640.25 604.36 639.98 610.78 636.83 614.8 631.57 598.2 626.6 593.57 627.32 590.5 623.73 582.36 618.78 576.32 622.8 569.73 621.51 560.93 614.3 558.67 618.38 542.06 622.49 533.81 629.16 531.51 631.97 527.13 631.85 520.42 642.2 512.2 652.8 512.88 659.33 518.8 669.43 521.39 673 516.11 684.63 507.82 693.74 507.96 701.37 504.68 715.31 508.77 723.78 498.85 Z" role="button" tabindex="0" aria-label="삼척시" onclick="selectRegion('삼척시','samcheok')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('삼척시','samcheok')"/>
+          <path id="region-sokcho" class="rg" data-region="속초시" d="M 517.49 168.23 520.94 177.07 517.15 185.33 523.97 185.21 526.87 190.96 526.15 198.83 512.74 199.27 509.17 204.75 500.52 204.76 498.77 210.28 485.3 210.25 476.16 217.98 476.46 210.16 468.41 204.64 466.75 198.86 460.64 192.74 462.46 187.22 466.61 185.67 467.91 180.73 476.88 183.31 483.19 187.28 487.76 181.19 495.69 178.74 499.71 175.04 511.71 173 517.49 168.23 Z" role="button" tabindex="0" aria-label="속초시" onclick="selectRegion('속초시','sokcho')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('속초시','sokcho')"/>
+          <path id="region-yanggu" class="rg" data-region="양구군" d="M 324.49 265.4 318.66 263.51 311.84 271.22 308.5 267.41 309.02 260.09 298.51 254.92 292.54 265.76 280.58 258.69 280.05 249.74 283.87 246.22 280.6 241.11 279.43 231.95 274.94 230.8 273.69 223.6 270.68 219.51 269.81 210.64 272.35 197.25 267.4 181.47 261.99 179.88 262.28 170.53 264.15 168.73 262.65 157.73 265.66 147.02 274.61 135.7 276.84 133.86 293.33 136.67 298.92 139.37 307.48 148.14 315.69 149.19 319.77 133.09 324.06 132.64 330.56 136.18 337.38 134.85 343.83 131.41 352.72 126.92 363.76 128.27 367.31 126.1 372.84 132.07 372.08 143.91 373.55 147.21 369.65 155.83 363.98 161.39 356.9 165.24 354.31 172.26 356 177.28 348.31 186.98 350.42 189.81 347.62 199.88 343.94 204.5 350.56 223.72 345.54 227.01 345.04 230.81 349.81 238.13 353.47 240.26 355.33 250.67 353.83 255.34 347.14 259.2 335.36 250.93 335.26 265.14 329.25 262.98 324.49 265.4 Z" role="button" tabindex="0" aria-label="양구군" onclick="selectRegion('양구군','yanggu')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('양구군','yanggu')"/>
+          <path id="region-yangyang" class="rg" data-region="양양군" d="M 567.67 259.07 571.58 260.36 569.58 266.42 580.14 278.54 581.22 284.29 589.18 294.28 590.37 297.81 597.89 305.61 575.75 309.6 570.84 313.78 565.97 312.3 548.08 320.32 539.54 316.39 532.83 322.82 531.89 326.44 525.04 327.24 520.48 331.13 515.47 330.04 512.98 325.21 503.43 318.46 494 323.46 490.75 320.28 482.99 317.86 480.2 314.31 480.64 303.54 476.54 299.08 481.23 286.97 487.94 284.97 487.56 277.72 493.46 268.38 488.87 259.31 486.46 249.07 480.57 249.33 467.89 245.16 462.64 249.14 458.95 243.16 455.1 228.42 457.27 221.84 463.24 223.07 476.16 217.98 485.3 210.25 498.77 210.28 500.52 204.76 509.17 204.75 512.74 199.27 526.15 198.83 526.24 203.75 535.84 218.59 549.65 234.07 550 239.59 557.83 249.8 567.67 259.07 Z" role="button" tabindex="0" aria-label="양양군" onclick="selectRegion('양양군','yangyang')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('양양군','yangyang')"/>
+          <path id="region-yeongwol" class="rg" data-region="영월군" d="M 519.28 593.48 515.77 600.16 519.69 603.93 520.52 614.72 527.23 616.83 534.81 615.24 534.52 620.57 544.62 631.38 549.48 629.14 561.67 629.84 572.54 623.7 580.6 617.62 587.36 621.32 597.75 624.43 604.22 629.24 606.11 633.08 613.94 636.96 628.96 635.99 634.65 645.53 630.32 648.24 630.8 655.46 624.09 663.04 630.3 665.63 630.78 670.05 626.27 675.96 632.05 683.14 638.63 680.27 634.07 685.95 627.48 687.09 626.51 690.86 616.27 687.97 609.91 676.2 602.31 677.39 599.26 672.6 590.11 672.47 587.12 683.1 583.03 687.5 586.37 695.21 581.3 698 576.59 693.54 570.92 692.06 564.47 693.43 560.39 688.08 549.13 684.64 538.72 678.58 536.69 673.19 530.89 677.99 519.64 676.08 515.1 672.19 510.74 673.86 505.31 668.82 498.22 666.41 491.88 656.73 485.32 663.71 471.14 663.42 465.81 666.3 464.29 659.65 456.3 655.85 457.95 647.76 452.1 642.88 434.79 643.39 433.11 646.45 426.37 648.7 421.73 653.69 412.82 647.82 411.85 639.56 420.59 632.01 424.83 630.77 426.82 625.99 431.41 625.73 433.53 618.22 426.95 614.54 410.88 621.2 404.63 611.68 396.71 612.43 389.33 603.3 391.06 597.16 391.43 585.91 382.99 583.63 378.96 584.37 378.65 589.82 366.22 593.65 356.34 592.64 354.15 581.48 357.48 578.98 356.34 574.01 361.43 568.31 376.74 569.64 374.88 564.19 381.53 562.45 378.42 546.97 381.68 539.75 393.26 539.05 398.88 541.77 405.07 539.38 409.13 532.63 419.33 535.83 422.37 541.35 431.01 546.73 427.46 557.29 429.16 559.45 430.26 570.92 441.99 576.47 444.33 580.76 450.94 585.06 456 581.33 460.01 582.61 458.56 570.89 461.75 562.67 475.48 564.17 479.13 569.22 479.8 576.94 491.26 578.38 492.68 584.49 505.05 586.75 512.26 584.62 519.28 593.48 Z" role="button" tabindex="0" aria-label="영월군" onclick="selectRegion('영월군','yeongwol')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('영월군','yeongwol')"/>
+          <path id="region-wonju" class="rg" data-region="원주시" d="M 354.15 581.48 356.34 592.64 366.22 593.65 378.65 589.82 378.96 584.37 382.99 583.63 391.43 585.91 391.06 597.16 389.33 603.3 384.12 605.04 377.48 610.55 377.16 616.54 370.67 618.08 366.17 612.4 359.99 610.14 355.47 621.69 342.34 628.24 329.23 630 326.07 623.94 329.71 618.18 324.13 613.97 322.74 605.69 318.75 602.3 310.79 599.68 305.24 600.79 294.38 607.45 288.3 614.41 292.18 622.37 293.56 630.41 292.65 636.14 288.74 641.1 283.83 640.01 281.39 646.79 270.9 641.3 262.02 646.43 254.42 646.69 251.61 648.93 241.76 650.65 232.94 643.34 229.87 638.56 225.67 622.36 227.31 617.59 226.56 608.03 231.33 593.48 229.23 582.51 233.83 580.22 230.32 561.01 230.86 551.78 237.38 550.1 236.9 544.68 241.42 534.22 245.21 520.22 252.02 516.69 259.15 522.3 263.09 533.17 269.07 537.37 270.19 530.28 267.59 526.02 268.16 516.47 272.12 507.63 282.36 504.78 283.71 498.79 290.4 489.89 294.12 492.41 291.6 497.15 297.34 511.29 304.26 514.13 307.18 511.25 316.38 511.88 321.26 516.7 336.24 516.94 337.86 521 345.11 525.91 349.91 533.98 343.37 536.84 341.29 551.24 333.18 551.91 329.23 557.21 327.63 566.75 334.15 577.33 354.15 581.48 Z" role="button" tabindex="0" aria-label="원주시" onclick="selectRegion('원주시','wonju')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('원주시','wonju')"/>
+          <path id="region-inje" class="rg" data-region="인제군" d="M 467.91 180.73 466.61 185.67 462.46 187.22 460.64 192.74 466.75 198.86 468.41 204.64 476.46 210.16 476.16 217.98 463.24 223.07 457.27 221.84 455.1 228.42 458.95 243.16 462.64 249.14 467.89 245.16 480.57 249.33 486.46 249.07 488.87 259.31 493.46 268.38 487.56 277.72 487.94 284.97 481.23 286.97 476.54 299.08 480.64 303.54 480.2 314.31 482.99 317.86 480.91 321.29 465.7 329.66 462.07 322.55 451.27 333.27 442.82 338.56 442.53 344.53 436.64 347.63 429.63 344.5 426.76 345.93 421.82 339.13 421.4 334.09 417.24 328.75 406.07 334.76 404.29 342.18 396.86 349.95 389.76 354.34 385.24 352.66 377.68 344.42 373.63 337.27 373.67 328.21 375.47 322.39 370.73 317.91 365.18 318.95 351.52 315.86 346.38 316.67 336.94 311.23 328.28 303.96 323.44 295.95 318.77 299.15 312.61 297.92 308.66 287.97 308.49 276.81 319.53 273.38 324.49 265.4 329.25 262.98 335.26 265.14 335.36 250.93 347.14 259.2 353.83 255.34 355.33 250.67 353.47 240.26 349.81 238.13 345.04 230.81 345.54 227.01 350.56 223.72 343.94 204.5 347.62 199.88 350.42 189.81 348.31 186.98 356 177.28 354.31 172.26 356.9 165.24 363.98 161.39 369.65 155.83 373.55 147.21 372.08 143.91 372.84 132.07 367.31 126.1 363.76 128.27 352.72 126.92 343.83 131.41 353.74 122.98 357.96 124.87 368.73 118.03 374.19 110.62 380.07 106.76 385.49 105.93 391.9 99.26 393.32 105.04 399.74 107.53 407.05 105.1 408.12 109.71 405.38 115.96 408.85 123.04 413.4 120.98 422.02 125.1 420.84 129.33 425.04 138.48 424.22 151.74 430.98 154.83 437.49 153.25 441.08 164.16 448.29 161.77 454.34 163.7 459.07 158.47 466.45 165.08 466.27 176.17 467.91 180.73 Z" role="button" tabindex="0" aria-label="인제군" onclick="selectRegion('인제군','inje')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('인제군','inje')"/>
+          <path id="region-jeongseon" class="rg" data-region="정선군" d="M 657.75 474.32 653.53 483.73 662.23 492.22 663.82 495.98 662.18 502.23 655.16 508.02 652.8 512.88 642.2 512.2 631.85 520.42 631.97 527.13 629.16 531.51 622.49 533.81 618.38 542.06 614.3 558.67 621.51 560.93 622.8 569.73 618.78 576.32 623.73 582.36 627.32 590.5 626.6 593.57 631.57 598.2 636.83 614.8 639.72 616.83 638.46 632.13 640.64 638.7 638.67 644.5 634.65 645.53 628.96 635.99 613.94 636.96 606.11 633.08 604.22 629.24 597.75 624.43 587.36 621.32 580.6 617.62 572.54 623.7 561.67 629.84 549.48 629.14 544.62 631.38 534.52 620.57 534.81 615.24 527.23 616.83 520.52 614.72 519.69 603.93 515.77 600.16 519.28 593.48 526.38 587.06 520.42 580.01 521.38 574.61 517.24 567.75 515.43 559.49 511.81 556.2 510.75 548.53 505.53 535.58 496.71 533.72 493.96 527.52 498.35 520.3 496.21 511.2 499.9 507.41 509.94 510.45 513.87 508.24 511.33 496.04 518.46 486.2 522.58 464.43 531.6 457.6 535.22 458.82 535.81 465.9 542.14 467.36 550.87 465.29 553.96 459.82 559.48 472.42 564.07 476.34 569.61 475.07 574.53 469.52 583.33 471.97 593.48 472.84 596.02 482 602.78 488.13 614.08 483 617.46 472.28 618.93 456.58 622.26 450.14 626.46 448.66 630.8 451.33 633.73 459.94 633.83 466.34 640.27 468.7 643.42 472.28 653.96 470.22 657.75 474.32 Z" role="button" tabindex="0" aria-label="정선군" onclick="selectRegion('정선군','jeongseon')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('정선군','jeongseon')"/>
+          <path id="region-cheorwon" class="rg" data-region="철원군" d="M 274.61 135.7 265.66 147.02 257.36 145.35 246.97 145.39 244.4 149.78 237.66 144.99 220.48 149.19 210.67 162.71 202.43 160.43 199.27 155.77 190.97 157.57 183.64 155.8 176.77 146.59 172.1 149.6 173.27 156.34 163.78 162.4 159.84 169.66 154.41 170.37 154.15 176.61 147.91 183.77 142.35 184.42 140.84 195.75 136.12 202.07 140.34 206.8 137.72 213.65 133.31 217.35 128.03 217.11 123.25 220.51 118.89 217.46 115.12 221.42 109.49 227.25 104.69 222.12 96.99 220.05 92.56 225.13 83.25 227.83 82.66 232.56 76.75 230.51 73.52 221.12 64.78 221.67 60.79 211.91 64.84 204.88 65.76 197.45 63.73 191.51 57.76 192.67 54.26 200.28 43.88 206.71 42.37 211.54 31.51 201.66 27.96 189.98 24.17 184.66 26.1 181.42 21.2 175.76 22.03 166.83 17.03 165.1 10.82 169.31 3.65 165.39 3.4 152.1 1 145.17 3.93 141.49 9.79 139.83 13.78 132.57 19.41 137.86 40.96 130.34 48.92 125.35 53.74 127.92 65.45 128.45 71.97 132.12 79.64 131.72 86.26 127.16 91.32 129.19 98.07 123.42 114.15 128.01 119.93 132.36 131.09 132.91 132.97 136.86 138.45 140.03 144.45 138.14 156.69 128.08 166.48 123.77 177.32 123.6 180.92 128.83 205.99 128.55 209.71 123.78 214.53 126.75 220.73 122.74 226.74 124.78 234.07 123.26 238.67 118.97 242.86 129.51 250.46 136.24 255.32 137.25 261.07 133.34 269.86 132.13 274.61 135.7 Z" role="button" tabindex="0" aria-label="철원군" onclick="selectRegion('철원군','cheorwon')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('철원군','cheorwon')"/>
+          <path id="region-chuncheon" class="rg available" data-region="춘천시" d="M 280.05 249.74 280.58 258.69 292.54 265.76 298.51 254.92 309.02 260.09 308.5 267.41 311.84 271.22 318.66 263.51 324.49 265.4 319.53 273.38 308.49 276.81 308.66 287.97 312.61 297.92 308.63 305.79 308.95 309.98 304.58 316.17 304.92 323.9 299.6 327.77 294.56 339.29 294.98 343.44 288.09 343.49 282.19 338.77 281.65 335.33 272.74 333.67 269.57 343.96 261.4 344.79 252.22 340.39 249.26 345.87 254.18 351.51 253.26 361.33 259.37 364.93 264.25 373.32 260.33 382.86 254.57 386.67 250.32 383.3 242.83 389.3 238.24 386.09 228.74 390.47 225.83 386.3 205.12 397.7 201.79 407.02 194.97 404.87 192.79 411.11 187.88 405.56 183.63 407.21 182.79 412.04 177.25 415.13 178.15 405.61 173.12 403.5 170.67 393.69 165.21 390.49 160.39 392.3 153.46 396.33 141.86 391.08 154.13 380.78 153.72 373.62 147.17 365.64 152.46 356.1 148.35 350.65 149.68 343.21 162.78 334.58 163.39 331.16 169.2 327.1 175.51 327.96 180.37 313.74 178.58 298.62 175.2 292.26 169.36 289.38 155.94 287.21 153.31 272.15 155.01 263.77 161.68 262.68 166.85 254.82 166.24 245.19 161.78 240.72 162.45 235.34 173.19 237.08 177.19 241.92 176.19 245.41 182.57 249.6 192.91 249.33 192.06 260.42 198.62 257.25 209.46 255.46 214 261.74 218.14 261.2 222.54 255.37 233.58 259.79 240.14 274.76 248.87 270.6 253.69 271.84 258.15 266.08 264.53 263.84 261.39 256.15 262.32 251.65 280.05 249.74 Z" role="button" tabindex="0" aria-label="춘천시" onclick="selectRegion('춘천시','chuncheon')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('춘천시','chuncheon')"/>
+          <path id="region-taebaek" class="rg" data-region="태백시" d="M 704.01 665.09 695.16 670.58 691.44 680.8 678.93 675.21 664.66 672.63 655.9 675.91 650.97 668.83 643.07 669.68 638.63 680.27 632.05 683.14 626.27 675.96 630.78 670.05 630.3 665.63 624.09 663.04 630.8 655.46 630.32 648.24 634.65 645.53 638.67 644.5 640.64 638.7 638.46 632.13 639.72 616.83 636.83 614.8 639.98 610.78 640.25 604.36 646.32 601.92 643.93 592.13 648.09 586.87 648.7 575.3 658.3 562.39 664.72 561.9 671.35 557.26 672.97 561 667.96 566.45 675.24 575.78 670.2 582.55 674.01 588.46 670.99 593.19 666.81 606.07 670.98 606.07 669.33 613.69 669.9 620.14 675.44 629.72 687.8 634.6 695.07 634.49 695.93 638.98 701.07 639.56 703.62 648.26 701.2 659.25 704.01 665.09 Z" role="button" tabindex="0" aria-label="태백시" onclick="selectRegion('태백시','taebaek')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('태백시','taebaek')"/>
+          <path id="region-pyeongchang" class="rg" data-region="평창군" d="M 424.56 402.29 428.44 408.06 441.23 403.83 447.17 407.25 460.79 408.67 467.71 406.66 470.73 402.94 471 395.46 475.46 389.6 482.77 387.82 498.07 389.85 499.67 379.62 498.51 374.69 504.9 363.87 505.28 358.61 509.66 354.48 514.12 355.29 518.83 349.11 524.94 354.59 525.59 366.73 528.82 373.37 533.44 371.82 537.35 366.61 550.02 372.82 552.94 370.12 563.36 372.13 569.24 380.25 575.75 383.73 577.33 395.79 583.64 413.63 577.41 416.82 572.64 422.08 571.03 429.53 573.62 433.57 573.98 441.94 569.22 441.31 566.97 449.26 555.58 449.2 553.96 459.82 550.87 465.29 542.14 467.36 535.81 465.9 535.22 458.82 531.6 457.6 522.58 464.43 518.46 486.2 511.33 496.04 513.87 508.24 509.94 510.45 499.9 507.41 496.21 511.2 498.35 520.3 493.96 527.52 496.71 533.72 505.53 535.58 510.75 548.53 511.81 556.2 515.43 559.49 517.24 567.75 521.38 574.61 520.42 580.01 526.38 587.06 519.28 593.48 512.26 584.62 505.05 586.75 492.68 584.49 491.26 578.38 479.8 576.94 479.13 569.22 475.48 564.17 461.75 562.67 458.56 570.89 460.01 582.61 456 581.33 450.94 585.06 444.33 580.76 441.99 576.47 430.26 570.92 429.16 559.45 427.46 557.29 431.01 546.73 422.37 541.35 419.33 535.83 409.13 532.63 406.89 528.92 406.31 519.54 403.09 518.28 401.15 501.21 408.64 498.63 412.78 491.04 420.05 486.87 421.61 475.31 418.63 472.22 418.59 462.01 413.33 451.56 414.77 439.58 404.27 435.95 411.65 430.2 412.09 417.55 421.79 407.61 424.56 402.29 Z" role="button" tabindex="0" aria-label="평창군" onclick="selectRegion('평창군','pyeongchang')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('평창군','pyeongchang')"/>
+          <path id="region-hongcheon" class="rg" data-region="홍천군" d="M 482.99 317.86 490.75 320.28 494 323.46 503.43 318.46 512.98 325.21 515.47 330.04 520.48 331.13 518.36 341.89 518.83 349.11 514.12 355.29 509.66 354.48 505.28 358.61 504.9 363.87 498.51 374.69 499.67 379.62 498.07 389.85 482.77 387.82 475.46 389.6 471 395.46 470.73 402.94 467.71 406.66 460.79 408.67 447.17 407.25 441.23 403.83 428.44 408.06 424.56 402.29 421.79 407.61 412.09 417.55 411.65 430.2 404.27 435.95 397.93 436.95 390.16 428.24 385.1 425.36 380.26 426.3 373.26 422.09 368.22 421.67 362.65 412.94 356.63 413.66 354.47 419.74 348.67 425.12 342.95 426.75 337.74 432.86 326.01 438.76 322.16 442.78 319.33 437.02 307.77 434.61 300.72 437.39 297.95 443.81 291.62 444.42 282.62 449.49 278.23 449.56 277.82 455.41 270.34 465.56 261.8 469.95 256.24 465.88 249.84 464.76 243.91 456.02 239.38 458.62 233.09 456.63 228.7 452.49 223.35 454.5 217.81 453.16 212.74 454.99 209.97 450.75 198.24 441.43 191.9 438.18 184.21 430.29 175.26 426.32 167.7 434.34 159.21 435.86 152.69 430.78 157.92 421.92 157.15 410.65 160.39 392.3 165.21 390.49 170.67 393.69 173.12 403.5 178.15 405.61 177.25 415.13 182.79 412.04 183.63 407.21 187.88 405.56 192.79 411.11 194.97 404.87 201.79 407.02 205.12 397.7 225.83 386.3 228.74 390.47 238.24 386.09 242.83 389.3 250.32 383.3 254.57 386.67 260.33 382.86 264.25 373.32 259.37 364.93 253.26 361.33 254.18 351.51 249.26 345.87 252.22 340.39 261.4 344.79 269.57 343.96 272.74 333.67 281.65 335.33 282.19 338.77 288.09 343.49 294.98 343.44 294.56 339.29 299.6 327.77 304.92 323.9 304.58 316.17 308.95 309.98 308.63 305.79 312.61 297.92 318.77 299.15 323.44 295.95 328.28 303.96 336.94 311.23 346.38 316.67 351.52 315.86 365.18 318.95 370.73 317.91 375.47 322.39 373.67 328.21 373.63 337.27 377.68 344.42 385.24 352.66 389.76 354.34 396.86 349.95 404.29 342.18 406.07 334.76 417.24 328.75 421.4 334.09 421.82 339.13 426.76 345.93 429.63 344.5 436.64 347.63 442.53 344.53 442.82 338.56 451.27 333.27 462.07 322.55 465.7 329.66 480.91 321.29 482.99 317.86 Z" role="button" tabindex="0" aria-label="홍천군" onclick="selectRegion('홍천군','hongcheon')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('홍천군','hongcheon')"/>
+          <path id="region-hwacheon" class="rg" data-region="화천군" d="M 265.66 147.02 262.65 157.73 264.15 168.73 262.28 170.53 261.99 179.88 267.4 181.47 272.35 197.25 269.81 210.64 270.68 219.51 273.69 223.6 274.94 230.8 279.43 231.95 280.6 241.11 283.87 246.22 280.05 249.74 262.32 251.65 261.39 256.15 264.53 263.84 258.15 266.08 253.69 271.84 248.87 270.6 240.14 274.76 233.58 259.79 222.54 255.37 218.14 261.2 214 261.74 209.46 255.46 198.62 257.25 192.06 260.42 192.91 249.33 182.57 249.6 176.19 245.41 177.19 241.92 173.19 237.08 162.45 235.34 161.78 240.72 166.24 245.19 166.85 254.82 161.68 262.68 155.01 263.77 153.31 272.15 140.74 273.3 138.46 270.76 129.69 269.62 124.52 264.89 120.01 247.1 120.88 236.73 118.58 224.31 115.12 221.42 118.89 217.46 123.25 220.51 128.03 217.11 133.31 217.35 137.72 213.65 140.34 206.8 136.12 202.07 140.84 195.75 142.35 184.42 147.91 183.77 154.15 176.61 154.41 170.37 159.84 169.66 163.78 162.4 173.27 156.34 172.1 149.6 176.77 146.59 183.64 155.8 190.97 157.57 199.27 155.77 202.43 160.43 210.67 162.71 220.48 149.19 237.66 144.99 244.4 149.78 246.97 145.39 257.36 145.35 265.66 147.02 Z" role="button" tabindex="0" aria-label="화천군" onclick="selectRegion('화천군','hwacheon')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('화천군','hwacheon')"/>
+          <path id="region-hoengseong" class="rg" data-region="횡성군" d="M 404.27 435.95 414.77 439.58 413.33 451.56 418.59 462.01 418.63 472.22 421.61 475.31 420.05 486.87 412.78 491.04 408.64 498.63 401.15 501.21 403.09 518.28 406.31 519.54 406.89 528.92 409.13 532.63 405.07 539.38 398.88 541.77 393.26 539.05 381.68 539.75 378.42 546.97 381.53 562.45 374.88 564.19 376.74 569.64 361.43 568.31 356.34 574.01 357.48 578.98 354.15 581.48 334.15 577.33 327.63 566.75 329.23 557.21 333.18 551.91 341.29 551.24 343.37 536.84 349.91 533.98 345.11 525.91 337.86 521 336.24 516.94 321.26 516.7 316.38 511.88 307.18 511.25 304.26 514.13 297.34 511.29 291.6 497.15 294.12 492.41 290.4 489.89 283.71 498.79 282.36 504.78 272.12 507.63 268.16 516.47 267.59 526.02 270.19 530.28 269.07 537.37 263.09 533.17 259.15 522.3 252.02 516.69 245.21 520.22 243.7 509.44 245.35 506.35 239.65 502.54 238 498.15 230.9 496.3 230.84 491.71 236.1 490.2 247.19 479.34 248.45 476.29 259.69 475.88 261.8 469.95 270.34 465.56 277.82 455.41 278.23 449.56 282.62 449.49 291.62 444.42 297.95 443.81 300.72 437.39 307.77 434.61 319.33 437.02 322.16 442.78 326.01 438.76 337.74 432.86 342.95 426.75 348.67 425.12 354.47 419.74 356.63 413.66 362.65 412.94 368.22 421.67 373.26 422.09 380.26 426.3 385.1 425.36 390.16 428.24 397.93 436.95 404.27 435.95 Z" role="button" tabindex="0" aria-label="횡성군" onclick="selectRegion('횡성군','hoengseong')" onkeydown="if(event.key==='Enter'||event.key===' ')selectRegion('횡성군','hoengseong')"/>
+          <text id="label-gangneung" class="mLabel" x="605" y="398">강릉</text>
+          <text id="label-goseong" class="mLabel" x="450" y="76">고성</text>
+          <text id="label-donghae" class="mLabel" x="688" y="484">동해</text>
+          <text id="label-samcheok" class="mLabel" x="720" y="592">삼척</text>
+          <text id="label-sokcho" class="mLabel" x="493" y="193">속초</text>
+          <text id="label-yanggu" class="mLabel" x="316" y="205">양구</text>
+          <text id="label-yangyang" class="mLabel" x="530" y="270">양양</text>
+          <text id="label-yeongwol" class="mLabel" x="505" y="638">영월</text>
+          <text id="label-wonju" class="mLabel" x="300" y="585">원주</text>
+          <text id="label-inje" class="mLabel" x="410" y="240">인제</text>
+          <text id="label-jeongseon" class="mLabel" x="585" y="548">정선</text>
+          <text id="label-cheorwon" class="mLabel" x="132" y="170">철원</text>
+          <text id="label-chuncheon" class="mLabel available" x="218" y="340">춘천</text>
+          <text id="label-taebaek" class="mLabel" x="665" y="632">태백</text>
+          <text id="label-pyeongchang" class="mLabel" x="482" y="486">평창</text>
+          <text id="label-hongcheon" class="mLabel" x="345" y="383">홍천</text>
+          <text id="label-hwacheon" class="mLabel" x="198" y="210">화천</text>
+          <text id="label-hoengseong" class="mLabel" x="325" y="500">횡성</text>
+          <g id="pin" onclick="openDex('char')" role="button" tabindex="0" aria-label="춘천 캐릭터 달구">
+            <circle cx="230" cy="305" r="23" fill="#F7F6F2" stroke="#1D4A3E" stroke-width="2.5"/>
+            <g id="pinBody" transform="translate(218,293) scale(0.375)" style="color:#1D4A3E">
               <use href="#c-dalgu" width="64" height="64" style="stroke:currentColor;fill:none;stroke-width:3"/>
             </g>
           </g>
         </svg>
         <div class="legend">
-          <span><i style="background:var(--pine)"></i>시연 지역</span>
+          <span><i style="background:var(--pine)"></i>포획 완료</span>
+          <span><i style="background:#DDE9E3;border:1px solid var(--pine)"></i>포획 전</span>
           <span><i style="background:#EAE8DF"></i>미개방</span>
-          <span style="margin-left:auto">전체 18개 시·군</span>
         </div>
       </div>
 
@@ -428,7 +505,7 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
           <div style="display:flex;align-items:center;gap:10px;color:#E8D3A8;margin-bottom:10px">
             <svg class="ic"><use href="#i-moon"/></svg><b style="font-size:.86rem">야간 여행 보너스</b>
           </div>
-          <p style="font-size:.78rem;line-height:1.65;color:#A8B2AC">낮에 붐비는 장소를 저녁에 방문하면 스탬프 포인트가 <b style="color:#E8D3A8">2배</b>로 적립됩니다. 상단의 주간/야간 전환으로 확인해 보세요.</p>
+          <p style="font-size:.78rem;line-height:1.65;color:#A8B2AC">낮에 붐비는 장소를 저녁에 방문하면 스탬프 포인트가 <b style="color:#E8D3A8">2배</b>로 적립됩니다. 현재 시간에 따라 주간·야간 모드가 자동 적용됩니다.</p>
         </div>
       </div>
 
@@ -453,6 +530,11 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
           <span><svg class="ic sm"><use href="#i-clock"/></svg><b id="dTime"></b></span>
           <span><svg class="ic sm"><use href="#i-won"/></svg><b id="dCost"></b></span>
           <span><svg class="ic sm"><use href="#i-pin"/></svg><b id="dCnt"></b></span>
+        </div>
+        <div class="geoCard">
+          <div class="gi"><svg class="ic sm"><use href="#i-pin"/></svg></div>
+          <div style="flex:1"><b id="courseGeoTitle">위치 확인 필요</b><p id="courseGeoTxt">정류장 250m 안에서 방문 인증이 활성화됩니다.</p></div>
+          <button class="locBtn" id="courseGeoBtn" onclick="requestLocation()">위치 허용</button>
         </div>
         <div id="dStops"></div>
         <button class="btn" id="dStart" onclick="startCourse()">이 코스 시작하기</button>
@@ -523,7 +605,10 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
 
       <div class="subview" id="sv-album">
         <div class="eyebrow tight">춘천 기록</div>
-        <p class="muted" style="margin-bottom:14px">인증한 장소가 위치 기록과 함께 자동 정리됩니다.</p>
+        <div class="albumTools">
+          <p class="muted">인증한 장소가 위치 기록과 함께 자동 정리됩니다.</p>
+          <button class="btn line sm" onclick="openCamera()"><svg class="ic sm"><use href="#i-camera"/></svg>사진 촬영</button>
+        </div>
         <div class="albumGrid" id="albumGrid"></div>
       </div>
 
@@ -599,6 +684,20 @@ nav button.on::before{content:'';position:absolute;top:0;left:50%;transform:tran
     <div id="hitDots"><i></i><i></i><i></i></div>
   </div>
 
+  <div id="cameraOv" aria-hidden="true">
+    <div class="cameraTop">
+      <svg class="ic"><use href="#i-camera"/></svg>
+      <div><b id="cameraPlace">춘천 여행 기록</b><br><span>사진은 도감 앨범에만 저장됩니다</span></div>
+      <button id="cameraX" onclick="closeCamera()" aria-label="카메라 닫기"><svg class="ic sm"><use href="#i-x"/></svg></button>
+    </div>
+    <video id="cameraVideo" autoplay playsinline muted></video>
+    <div class="cameraBottom">
+      <button id="cameraShot" onclick="capturePhoto()" aria-label="사진 촬영"></button>
+      <div class="cameraHint">버튼을 눌러 도감 앨범에 저장</div>
+    </div>
+  </div>
+  <input id="cameraFile" type="file" accept="image/*" capture="environment" hidden onchange="handlePhotoFile(event)">
+
   <div id="modal"><div class="inner" id="modalInner"></div></div>
   <div id="toast"><svg class="ic sm" id="toastIc"><use href="#i-check"/></svg><span id="toastTxt"></span></div>
 </div>
@@ -609,6 +708,7 @@ const S={
   pts:0,night:false,course:null,stamped:[],totalStamps:0,
   caught:false,lv:1,exp:0,evolved:false,gv:false,paid:false,
   album:[],badges:{finish:false,night:false,debut:false},
+  position:null,geoStatus:'idle',geoAccuracy:null,
   missions:[
     {id:'m1',label:'스탬프 1개 적립',meta:'코스 정류장 방문 인증',target:1,cur:0,reward:150,got:false},
     {id:'m2',label:'커뮤니티 글 작성',meta:'여행기록 또는 주민제보',target:1,cur:0,reward:150,got:false},
@@ -628,58 +728,62 @@ const S={
   ],
   nextId:5,wTag:'여행기록',wStar:0,feedFilter:'all',
 };
-const NEED=3;
-const RIVALS=[{who:'여행자 민수',ini:'민',n:12},{who:'사진러 하늘',ini:'하',n:9},{who:'뚜벅이 지은',ini:'지',n:5}];
-const ALERTS=[
-  ['기상 특보','대룡산 방면 새벽 안개 — 운전 시 감속 주의'],
-  ['도로 통제','소양강댐 진입로 14–16시 부분 통제 예정'],
-  ['현재 날씨','춘천 27℃ 맑음 · 야외 활동 적합'],
-];
+const saved = localStorage.getItem("gangwondogam");
 
+if (saved) {
+  Object.assign(S, JSON.parse(saved));
+}
+const NEED=3;
+const VISIT_RADIUS=250;
+const DAY_START=6;
+const NIGHT_START=18;
+const DEFAULT_WEATHER_POSITION={lat:37.8813,lng:127.7298};
+const WEATHER_REFRESH_MS=5*60*1000;
+const RIVALS=[{who:'여행자 민수',ini:'민',n:12},{who:'사진러 하늘',ini:'하',n:9},{who:'뚜벅이 지은',ini:'지',n:5}];
 /* ===================== 데이터 ===================== */
 const COURSES={
   healing:[
     {id:'h1',name:'호반 노을 코스',time:'약 4시간',cost:'15,000원',
      desc:'소양강을 따라 걷다가 스카이워크에서 노을로 마무리하는 대표 힐링 루트입니다.',
-     stops:[{n:'소양강 스카이워크',meta:'10:00–18:00 · 입장 2,000원 (상품권 환급)',night:true},
-            {n:'소양강 처녀상 산책로',meta:'상시 개방 · 무료'},
-            {n:'공지천 카페거리 호반다방',meta:'09:00–21:00 · 소상공인'}]},
+     stops:[{n:'소양강 스카이워크',lat:37.8939168,lng:127.7252965,meta:'10:00–18:00 · 입장 2,000원 (상품권 환급)',night:true},
+            {n:'소양강 처녀상 산책로',lat:37.8939168,lng:127.7252965,meta:'상시 개방 · 무료'},
+            {n:'공지천 카페거리 호반다방',lat:37.8736,lng:127.7127,meta:'09:00–21:00 · 소상공인'}]},
     {id:'h2',name:'의암호 숲길 코스',time:'약 3시간',cost:'8,000원',
      desc:'의암호 스카이워크와 호수 둘레길을 천천히 도는 저강도 산책 코스입니다.',
-     stops:[{n:'의암호 스카이워크',meta:'09:00–18:00 · 무료'},
-            {n:'삼악산 케이블카 전망대',meta:'10:00–19:00 · 케이블카 별도',night:true},
-            {n:'호수마을 두부집',meta:'11:00–20:00 · 소상공인'}]},
+     stops:[{n:'의암호 스카이워크',lat:37.8519,lng:127.6884,meta:'09:00–18:00 · 무료'},
+            {n:'삼악산 케이블카 전망대',lat:37.8541,lng:127.688,meta:'10:00–19:00 · 케이블카 별도',night:true},
+            {n:'호수마을 두부집',lat:37.872,lng:127.7005,meta:'11:00–20:00 · 소상공인'}]},
   ],
   food:[
     {id:'f1',name:'닭갈비 원조 순례',time:'약 3시간',cost:'18,000원',
      desc:'명동 닭갈비 골목부터 육림고개 숨은 맛집까지, 달구의 고향을 도는 코스입니다.',
-     stops:[{n:'명동 닭갈비 골목 3대집',meta:'11:00–21:30 · 소상공인 · 1인 13,000원'},
-            {n:'육림고개 수제 막국수',meta:'11:00–15:00 (재료 소진 시 마감) · 주민 제보'},
-            {n:'낭만시장 옥수수호떡',meta:'12:00–19:00 · 전통시장 · 2,000원'}]},
+     stops:[{n:'명동 닭갈비 골목 3대집',lat:37.8793,lng:127.7282,meta:'11:00–21:30 · 소상공인 · 1인 13,000원'},
+            {n:'육림고개 수제 막국수',lat:37.87721,lng:127.73044,meta:'11:00–15:00 (재료 소진 시 마감) · 주민 제보'},
+            {n:'낭만시장 옥수수호떡',lat:37.8794,lng:127.7274,meta:'12:00–19:00 · 전통시장 · 2,000원'}]},
     {id:'f2',name:'감자밭 디저트 코스',time:'약 2시간 30분',cost:'12,000원',
      desc:'감자빵의 성지와 호수 전망 카페를 잇는 디저트 특화 코스입니다.',
-     stops:[{n:'감자밭 본점',meta:'10:00–19:00 · 감자빵 3,300원'},
-            {n:'소양로 로스터리',meta:'10:00–22:00 · 소상공인'},
-            {n:'낭만시장 옛날통닭',meta:'14:00–21:00 · 전통시장'}]},
+     stops:[{n:'감자밭 본점',lat:37.9594,lng:127.754,meta:'10:00–19:00 · 감자빵 3,300원'},
+            {n:'소양로 로스터리',lat:37.881142,lng:127.7184629,meta:'10:00–22:00 · 소상공인'},
+            {n:'낭만시장 옛날통닭',lat:37.8794,lng:127.7274,meta:'14:00–21:00 · 전통시장'}]},
   ],
   photo:[
     {id:'p1',name:'감성 필름 코스',time:'약 4시간',cost:'10,000원',
      desc:'김유정역 옛 역사부터 구봉산 야경까지, 촬영 스팟을 잇는 코스입니다.',
-     stops:[{n:'김유정역 구역사',meta:'상시 개방 · 무료 · 레일바이크 별도'},
-            {n:'애니메이션박물관',meta:'10:00–18:00 · 월요일 휴관 · 5,000원'},
-            {n:'구봉산 전망대 카페',meta:'10:00–23:00 · 야경 명소',night:true}]},
+     stops:[{n:'김유정역 구역사',lat:37.8181214,lng:127.7144752,meta:'상시 개방 · 무료 · 레일바이크 별도'},
+            {n:'애니메이션박물관',lat:37.8930701,lng:127.6918497,meta:'10:00–18:00 · 월요일 휴관 · 5,000원'},
+            {n:'구봉산 전망대 카페',lat:37.9096,lng:127.783,meta:'10:00–23:00 · 야경 명소',night:true}]},
   ],
   activity:[
     {id:'a1',name:'물길 액티비티 코스',time:'약 5시간',cost:'35,000원',
      desc:'의암호 카누부터 삼악산 케이블카까지, 몸으로 즐기는 춘천입니다.',
-     stops:[{n:'의암호 물레길 카누',meta:'09:00–17:00 · 2인 30,000원 · 사전예약'},
-            {n:'삼악산 호수케이블카',meta:'10:00–19:00 · 왕복 23,000원'},
-            {n:'송암스포츠타운 인라인',meta:'09:00–18:00 · 대여 5,000원'}]},
+     stops:[{n:'의암호 물레길 카누',lat:37.855,lng:127.691,meta:'09:00–17:00 · 2인 30,000원 · 사전예약'},
+            {n:'삼악산 호수케이블카',lat:37.8541,lng:127.688,meta:'10:00–19:00 · 왕복 23,000원'},
+            {n:'송암스포츠타운 인라인',lat:37.85578,lng:127.68863,meta:'09:00–18:00 · 대여 5,000원'}]},
   ],
 };
 const CATS=[{k:'healing',l:'힐링'},{k:'food',l:'미식'},{k:'photo',l:'사진'},{k:'activity',l:'액티비티'}];
 const QUIZ=[
-  {q:'여행에서 가장 기대되는 순간은 언제인가요?',opts:[['i-sun','해질녘 강가를 걷는 순간','healing'],['i-drum','맛있는 음식의 첫 입을 베어무는 순간','food'],['i-camera','찍자마자 잘 나온 사진을 확인한 순간','photo'],['i-sparkle','심장이 두근거리는 순간','activity']]},
+  {q:'여행에서 가장 기대되는 순간은 언제인가요?',opts:[['i-sun','해질녘 강가를 걷는 순간','healing'],['i-drum','첫 입을 베어무는 순간','food'],['i-camera','찍자마자 잘 나온 사진을 확인한 순간','photo'],['i-sparkle','심장이 두근거리는 순간','activity']]},
   {q:'하루 이동 스타일에 가까운 쪽은?',opts:[['i-clock','한 곳에 오래, 느긋하게','healing'],['i-pin','맛집을 기준으로 동선 짜기','food'],['i-sun','빛이 좋은 시간대에 맞춰 이동','photo'],['i-compass','많이 움직일수록 좋다','activity']]},
   {q:'여행이 끝난 뒤 남기고 싶은 것은?',opts:[['i-moon','개운해진 마음','healing'],['i-shop','또 가고 싶은 맛의 기억','food'],['i-book','가득 찬 사진첩','photo'],['i-flag','해냈다는 성취감','activity']]},
 ];
@@ -687,6 +791,10 @@ const QUIZ=[
 /* ===================== 유틸 ===================== */
 const $=id=>document.getElementById(id);
 const ic=(n,cls='ic')=>`<svg class="${cls}"><use href="#${n}"/></svg>`;
+const esc=v=>String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const GEO_OPTIONS={enableHighAccuracy:true,timeout:15000,maximumAge:5000};
+let geoWatchId=null,cameraStream=null,cameraTargetIndex=null;
+let weatherRequestAt=0,weatherLoading=false,weatherUsesLocation=false;
 function toast(m,icon='i-check'){
   $('toastTxt').textContent=m;
   $('toastIc').innerHTML=`<use href="#${icon}"/>`;
@@ -697,6 +805,135 @@ function modal(icon,title,body,btn='확인'){
   $('modalInner').innerHTML=`<div class="mIco">${ic(icon,'ic lg')}</div><h3>${title}</h3><p>${body}</p>
     <button class="btn" onclick="$('modal').classList.remove('show')">${btn}</button>`;
   $('modal').classList.add('show');
+}
+function distanceMeters(a,b){
+  const r=6371000,toRad=v=>v*Math.PI/180;
+  const dLat=toRad(b.lat-a.lat),dLng=toRad(b.lng-a.lng);
+  const lat1=toRad(a.lat),lat2=toRad(b.lat);
+  const h=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;
+  return 2*r*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
+}
+function stopDistance(st){return S.position?distanceMeters(S.position,{lat:st.lat,lng:st.lng}):null;}
+function formatDistance(m){return m<1000?Math.max(1,Math.round(m))+'m':(m/1000).toFixed(1)+'km';}
+function nearestStop(){
+  if(!S.position||!curCourse)return null;
+  return curCourse.stops.map((st,i)=>({st,i,d:stopDistance(st)})).sort((a,b)=>a.d-b.d)[0];
+}
+function syncTimeMode(notify=false){
+  const hour=new Date().getHours();
+  const night=hour>=NIGHT_START||hour<DAY_START;
+  const changed=S.night!==night;
+  S.night=night;
+  $('modeBtn').classList.toggle('on',night);
+  $('modeIc').innerHTML=`<use href="#${night?'i-moon':'i-sun'}"/>`;
+  $('modeTxt').textContent=night?'야간':'주간';
+  if(notify&&changed)toast(night?'현재 시간 기준 야간 모드로 전환되었습니다':'현재 시간 기준 주간 모드로 전환되었습니다',night?'i-moon':'i-sun');
+}
+function selectRegion(name,slug){
+  if(slug==='chuncheon'){goCourseList();return;}
+  toast(`${name} 코스는 아직 준비 중입니다`,'i-pin');
+}
+function updateLiveClock(){
+  const now=new Date();
+  $('liveDate').textContent=new Intl.DateTimeFormat('ko-KR',{month:'long',day:'numeric',weekday:'short'}).format(now);
+  $('liveClock').textContent=new Intl.DateTimeFormat('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false}).format(now);
+}
+function weatherLabel(code){
+  if(code===0)return ['맑음','☀'];
+  if([1,2].includes(code))return ['구름 조금','◐'];
+  if(code===3)return ['흐림','☁'];
+  if([45,48].includes(code))return ['안개','≋'];
+  if([51,53,55,56,57].includes(code))return ['이슬비','⌁'];
+  if([61,63,65,66,67,80,81,82].includes(code))return ['비','☂'];
+  if([71,73,75,77,85,86].includes(code))return ['눈','✣'];
+  if([95,96,99].includes(code))return ['뇌우','ϟ'];
+  return ['날씨 확인','·'];
+}
+async function fetchWeather(force=false){
+  if(weatherLoading)return;
+  const now=Date.now();
+  if(!force&&now-weatherRequestAt<WEATHER_REFRESH_MS)return;
+  weatherLoading=true;weatherRequestAt=now;
+  const pos=S.position||DEFAULT_WEATHER_POSITION;
+  const place=S.position?'현재 위치':'춘천';
+  $('weatherMeta').textContent='업데이트 중';
+  try{
+    const url=new URL('https://api.open-meteo.com/v1/forecast');
+    url.search=new URLSearchParams({
+      latitude:String(pos.lat),longitude:String(pos.lng),
+      current:'temperature_2m,apparent_temperature,weather_code,wind_speed_10m',
+      timezone:'auto',
+    });
+    const response=await fetch(url);
+    if(!response.ok)throw new Error('weather response');
+    const data=await response.json(),current=data.current;
+    if(!current)throw new Error('weather payload');
+    const [label,mark]=weatherLabel(current.weather_code);
+    $('weatherMark').textContent=mark;
+    $('weatherTemp').textContent=Math.round(current.temperature_2m)+'°';
+    $('weatherDesc').textContent=`${place} · ${label}`;
+    $('weatherMeta').textContent=`체감 ${Math.round(current.apparent_temperature)}° · 바람 ${Math.round(current.wind_speed_10m)}km/h · 방금 갱신`;
+  }catch(_error){
+    $('weatherMark').textContent='·';
+    $('weatherTemp').textContent='--°';
+    $('weatherDesc').textContent=`${place} 날씨 연결 대기`;
+    $('weatherMeta').textContent=navigator.onLine?'잠시 후 다시 눌러 주세요':'오프라인 상태입니다';
+  }finally{weatherLoading=false;}
+}
+function requestLocation(){
+  if(!navigator.geolocation){S.geoStatus='unsupported';updateLocationUI();toast('이 기기에서는 위치 기능을 지원하지 않습니다','i-alert');return;}
+  S.geoStatus='requesting';updateLocationUI();
+  navigator.geolocation.getCurrentPosition(pos=>{
+    onGeoSuccess(pos);
+    if(geoWatchId===null)geoWatchId=navigator.geolocation.watchPosition(onGeoSuccess,onGeoWatchError,GEO_OPTIONS);
+  },onGeoError,GEO_OPTIONS);
+}
+function onGeoSuccess(pos){
+  S.position={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:pos.coords.accuracy};
+  S.geoAccuracy=pos.coords.accuracy;S.geoStatus='granted';
+  updateLocationUI();
+  const firstLocationWeather=!weatherUsesLocation;weatherUsesLocation=true;
+  fetchWeather(firstLocationWeather);
+  if(curCourse)renderStops();
+}
+function onGeoWatchError(err){
+  if(err.code===1)onGeoError(err);
+}
+function onGeoError(err){
+  S.geoStatus=err.code===1?'denied':'error';
+  updateLocationUI();
+  toast(err.code===1?'위치 권한을 허용해야 방문 인증을 사용할 수 있습니다':'현재 위치를 확인하지 못했습니다','i-alert');
+  if(curCourse)renderStops();
+}
+function updateLocationUI(){
+  const label=$('geoLabel'),text=$('geoTxt'),buttons=[$('geoBtn'),$('courseGeoBtn')].filter(Boolean);
+  let buttonText='위치 허용',title='위치 확인 필요',detail=`정류장 ${VISIT_RADIUS}m 안에서 방문 인증이 활성화됩니다.`;
+  if(S.geoStatus==='requesting'){buttonText='확인 중';title='현재 위치 확인 중';detail='기기의 위치 정보를 확인하고 있습니다.';}
+  else if(S.geoStatus==='granted'){
+    buttonText='새로고침';label.textContent='위치 확인됨';
+    text.textContent=`위치 오차 약 ${Math.round(S.geoAccuracy||0)}m · 정류장 주변에서 자동 활성화됩니다.`;
+    const near=nearestStop();
+    if(near){
+      const ready=near.d<=VISIT_RADIUS;
+      title=ready?'방문 인증 가능':'현재 위치 확인됨';
+      detail=ready?`${near.st.n} 주변에 도착했습니다.`:`${near.st.n}까지 ${formatDistance(near.d)} 남았습니다.`;
+    }else{title='위치 확인됨';detail='코스를 시작하면 가까운 정류장을 안내합니다.';}
+  }else if(S.geoStatus==='denied'){buttonText='권한 필요';title='위치 권한 꺼짐';detail='브라우저 설정에서 위치 권한을 허용해 주세요.';label.textContent='위치 권한 필요';text.textContent=detail;}
+  else if(S.geoStatus==='unsupported'){buttonText='지원 안 됨';title='위치 기능 미지원';detail='이 기기에서는 위치 기반 인증을 사용할 수 없습니다.';label.textContent=title;text.textContent=detail;}
+  else if(S.geoStatus==='error'){buttonText='다시 확인';title='위치 확인 실패';detail='신호가 잘 잡히는 곳에서 다시 시도해 주세요.';label.textContent=title;text.textContent=detail;}
+  else{label.textContent='위치 기반 방문 인증';text.textContent=`위치를 허용하면 정류장 ${VISIT_RADIUS}m 안에서 방문 인증이 활성화됩니다.`;}
+  buttons.forEach(b=>{b.textContent=buttonText;b.disabled=S.geoStatus==='requesting'||S.geoStatus==='unsupported';});
+  if($('courseGeoTitle'))$('courseGeoTitle').textContent=title;
+  if($('courseGeoTxt'))$('courseGeoTxt').textContent=detail;
+}
+async function restoreLocationPermission(){
+  if(!navigator.permissions?.query)return;
+  try{
+    const permission=await navigator.permissions.query({name:'geolocation'});
+    if(permission.state==='granted')requestLocation();
+    else if(permission.state==='denied'){S.geoStatus='denied';updateLocationUI();}
+    permission.onchange=()=>{if(permission.state==='granted')requestLocation();else if(permission.state==='denied'){S.geoStatus='denied';updateLocationUI();}};
+  }catch(_error){}
 }
 
 /* ===================== 내비 ===================== */
@@ -711,14 +948,6 @@ function dexTab(k){
   document.querySelectorAll('.subtabs button').forEach(b=>b.classList.toggle('on',b.dataset.sv===k));
   document.querySelectorAll('.subview').forEach(v=>v.classList.toggle('active',v.id==='sv-'+k));
 }
-function toggleNight(){
-  S.night=!S.night;
-  $('modeBtn').classList.toggle('on',S.night);
-  $('modeIc').innerHTML=`<use href="#${S.night?'i-moon':'i-sun'}"/>`;
-  $('modeTxt').textContent=S.night?'야간':'주간';
-  toast(S.night?'야간 모드 — 스탬프 포인트 2배 적립':'주간 모드로 전환했습니다',S.night?'i-moon':'i-sun');
-}
-
 /* ===================== 취향 테스트 ===================== */
 let qi=0,score={},answers=[];
 function showEntry(){['v-entry','v-test','v-list','v-detail'].forEach(id=>$(id).style.display=id==='v-entry'?'block':'none');}
@@ -757,7 +986,7 @@ function answer(k){
 let curCat='healing',curCourse=null;
 function goCourseList(){go('rec');showList(curCat);}
 function showList(cat){
-  curCat=cat;
+  curCat=cat;$('main').scrollTop=0;
   ['v-entry','v-test','v-detail'].forEach(id=>$(id).style.display='none');
   $('v-list').style.display='block';
   $('catBar').innerHTML=CATS.map(c=>`<button class="${c.k===cat?'on':''}" onclick="showList('${c.k}')">${c.l}</button>`).join('');
@@ -769,7 +998,7 @@ function showList(cat){
       <svg class="ic ar"><use href="#i-arrow"/></svg></div>`).join('');
 }
 function showDetail(cat,id){
-  curCourse=COURSES[cat].find(c=>c.id===id);
+  curCourse=COURSES[cat].find(c=>c.id===id);$('main').scrollTop=0;
   ['v-entry','v-test','v-list'].forEach(i=>$(i).style.display='none');
   $('v-detail').style.display='block';
   $('dTag').textContent=CATS.find(c=>c.k===cat).l;
@@ -778,32 +1007,53 @@ function showDetail(cat,id){
   $('dTime').textContent=curCourse.time;
   $('dCost').textContent=curCourse.cost;
   $('dCnt').textContent=curCourse.stops.length+'곳';
-  renderStops();
-  $('dStart').textContent=(S.course&&S.course.id===curCourse.id)?'진행 중인 코스입니다':'이 코스 시작하기';
+  renderStops();updateLocationUI();
+  const inProgress=S.course&&S.course.id===curCourse.id;
+  $('dStart').textContent=inProgress?'진행 중인 코스입니다':'이 코스 시작하기';
+  $('dStart').disabled=!!inProgress;
 }
 function renderStops(){
+  if(!curCourse)return;
   const on=S.course&&S.course.id===curCourse.id;
   $('dStops').innerHTML=curCourse.stops.map((st,i)=>{
     const done=on&&S.stamped.includes(i);
+    const dist=on?stopDistance(st):null;
+    let action='방문 인증',disabled='';
+    if(done){action='인증됨';disabled='disabled';}
+    else if(on&&!S.position){
+      action=S.geoStatus==='denied'?'권한 필요':'위치 허용';
+      if(S.geoStatus==='denied'||S.geoStatus==='unsupported')disabled='disabled';
+    }else if(on&&dist>VISIT_RADIUS){action=formatDistance(dist);disabled='disabled';}
     return `<div class="stop ${done?'on':''}">
       <div class="sn">${done?'<svg class="ic sm" style="width:11px;height:11px"><use href="#i-check"/></svg>':i+1}</div>
       <div class="si"><b>${st.n}${st.night?'<span class="tag nightt">야간 2배</span>':''}</b><div class="sm">${st.meta}</div></div>
-      ${on?`<button class="stampBtn ${done?'done':''}" onclick="stamp(${i})" ${done?'disabled':''}>${done?'인증됨':'방문 인증'}</button>`:''}
+      ${on?`<button class="stampBtn ${done?'done':''}" onclick="verifyVisit(${i})" ${disabled}>${action}</button>`:''}
     </div>`;}).join('');
+}
+function verifyVisit(i){
+  if(!S.course||S.stamped.includes(i))return;
+  if(!S.position){
+    if(S.geoStatus==='denied'){toast('브라우저 설정에서 위치 권한을 허용해 주세요','i-alert');return;}
+    requestLocation();return;
+  }
+  const dist=stopDistance(S.course.stops[i]);
+  if(dist>VISIT_RADIUS){toast(`정류장까지 ${formatDistance(dist)} 남았습니다`,'i-pin');return;}
+  stamp(i);
 }
 function startCourse(){
   if(S.course&&S.course.id===curCourse.id){toast('이미 진행 중인 코스입니다');return;}
   S.course=curCourse;S.stamped=[];
-  toast(`'${curCourse.name}' 시작 — 정류장에서 방문 인증하세요`,'i-pin');
-  renderStops();sync();
+  $('dStart').textContent='진행 중인 코스입니다';$('dStart').disabled=true;
+  toast(`'${curCourse.name}' 시작 — 정류장 ${VISIT_RADIUS}m 안에서 방문 인증하세요`,'i-pin');
+  renderStops();updateLocationUI();sync();
 }
 
 /* ===================== 스탬프 ===================== */
 function stamp(i){
   if(S.stamped.includes(i))return;
-  const st=S.course.stops[i], mul=S.night?2:1, p=100*mul;
+  const st=S.course.stops[i], mul=S.night&&st.night?2:1, p=100*mul;
   S.stamped.push(i);S.totalStamps++;S.pts+=p;
-  S.album.push({n:st.n});
+  S.album.push({n:st.n,lat:st.lat,lng:st.lng,photo:null,capturedAt:null});
   toast(`${st.n} 인증 · ${p}P 적립${mul>1?' (야간 2배)':''}`,'i-pin');
   if(S.night&&!S.badges.night){S.badges.night=true;setTimeout(()=>toast('뱃지 획득 — 야간 여행자','i-moon'),1400);}
   mission('m1');
@@ -857,6 +1107,60 @@ function charInfo(){
   if(!S.caught){toast('아직 발견하지 못한 캐릭터입니다','i-alert');return;}
   modal(S.evolved?'i-sparkle':'i-drum',`달구 Lv.${S.lv}`,
     `춘천 닭갈비 골목에서 태어난 요정.<br>매콤한 냄새를 맡으면 어디든 나타납니다.<br><br>함께한 기록 ${S.album.length}건 — 앨범 탭에서 확인할 수 있습니다.`);
+}
+
+/* ===================== 앨범 카메라 ===================== */
+async function openCamera(index=null){
+  if(!S.album.length){toast('방문 인증을 한 뒤 사진을 기록할 수 있습니다','i-alert');return;}
+  cameraTargetIndex=index===null?S.album.length-1:index;
+  $('cameraPlace').textContent=S.album[cameraTargetIndex].n;
+  if(!navigator.mediaDevices?.getUserMedia){$('cameraFile').click();return;}
+  try{
+    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+    $('cameraVideo').srcObject=cameraStream;
+    $('cameraOv').classList.add('show');$('cameraOv').setAttribute('aria-hidden','false');
+    await $('cameraVideo').play();
+  }catch(_error){
+    toast('카메라 권한을 허용하거나 사진을 선택해 주세요','i-camera');
+    $('cameraFile').click();
+  }
+}
+function closeCamera(){
+  if(cameraStream){cameraStream.getTracks().forEach(track=>track.stop());cameraStream=null;}
+  $('cameraVideo').srcObject=null;
+  $('cameraOv').classList.remove('show');$('cameraOv').setAttribute('aria-hidden','true');
+}
+function capturePhoto(){
+  const video=$('cameraVideo');
+  if(!video.videoWidth){toast('카메라 준비 중입니다','i-camera');return;}
+  const scale=Math.min(1,720/video.videoWidth);
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.round(video.videoWidth*scale);canvas.height=Math.round(video.videoHeight*scale);
+  canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+  saveAlbumPhoto(canvas.toDataURL('image/jpeg',.84));
+}
+function handlePhotoFile(event){
+  const file=event.target.files?.[0];
+  if(!file)return;
+  if(!file.type.startsWith('image/')){toast('이미지 파일만 선택할 수 있습니다','i-alert');event.target.value='';return;}
+  const reader=new FileReader();
+  reader.onload=()=>saveAlbumPhoto(reader.result);
+  reader.onerror=()=>toast('사진을 불러오지 못했습니다','i-alert');
+  reader.readAsDataURL(file);event.target.value='';
+}
+function saveAlbumPhoto(dataUrl){
+  if(cameraTargetIndex===null||!S.album[cameraTargetIndex])cameraTargetIndex=S.album.length-1;
+  const item=S.album[cameraTargetIndex];
+  item.photo=dataUrl;item.capturedAt=new Date().toISOString();
+  if(S.position)item.photoLocation={lat:S.position.lat,lng:S.position.lng};
+  closeCamera();sync();openDex('album');
+  toast(`${item.n} 사진이 앨범에 저장되었습니다`,'i-camera');
+}
+function openAlbumPhoto(index){
+  const item=S.album[index];
+  if(!item?.photo){openCamera(index);return;}
+  $('modalInner').innerHTML=`<img class="albumPreview" src="${item.photo}" alt="${esc(item.n)}"><h3>${esc(item.n)}</h3><p>${item.capturedAt?new Date(item.capturedAt).toLocaleString('ko-KR'):'춘천 여행 기록'}</p><button class="btn" onclick="$('modal').classList.remove('show')">확인</button>`;
+  $('modal').classList.add('show');
 }
 
 /* ===================== 리워드 ===================== */
@@ -927,10 +1231,10 @@ function renderFeed(){
   const list=S.posts.filter(p=>S.feedFilter==='all'||p.tag===S.feedFilter);
   $('feedList').innerHTML=list.map(p=>`
     <div class="post">
-      <div class="who"><span class="av">${p.ini}</span><b>${p.who}</b>
-        <span class="tag ${p.tag==='주민제보'?'pine':''}">${p.tag}</span>
-        <span class="tm">${p.time}</span></div>
-      <p class="bd">${p.text}</p>
+      <div class="who"><span class="av">${esc(p.ini)}</span><b>${esc(p.who)}</b>
+        <span class="tag ${p.tag==='주민제보'?'pine':''}">${esc(p.tag)}</span>
+        <span class="tm">${esc(p.time)}</span></div>
+      <p class="bd">${esc(p.text)}</p>
       ${p.stars?`<div class="strs">${'★'.repeat(p.stars)}${'☆'.repeat(5-p.stars)}</div>`:''}
       <div class="acts">
         <button class="actBtn ${p.liked?'liked':''}" onclick="likePost(${p.id})">
@@ -939,7 +1243,7 @@ function renderFeed(){
           <svg class="ic sm"><use href="#i-chat"/></svg>${p.cmts.length}</button>
       </div>
       <div class="cmts" id="cmts-${p.id}">
-        ${p.cmts.map(c=>`<div class="cmt"><b>${c.who}</b>${c.text}</div>`).join('')}
+        ${p.cmts.map(c=>`<div class="cmt"><b>${esc(c.who)}</b>${esc(c.text)}</div>`).join('')}
         <div class="cmtIn"><input id="ci-${p.id}" placeholder="댓글 남기기" onkeydown="if(event.key==='Enter')addCmt(${p.id})">
           <button onclick="addCmt(${p.id})">등록</button></div>
       </div>
@@ -958,9 +1262,12 @@ function renderRank(){
 function sync(){
   $('ptNum').textContent=S.pts.toLocaleString();
   const fab=$('fab');fab.className='';
-  if(S.caught){fab.classList.add('got');$('mapStat').textContent='달구 포획 완료';$('pinBody').classList.add('found');}
-  else if(S.totalStamps>=NEED){fab.classList.add('ready');$('mapStat').textContent='포획 가능';}
-  else $('mapStat').textContent=`스탬프 ${S.totalStamps} / ${NEED}`;
+  const chuncheon=$('region-chuncheon'),chuncheonLabel=$('label-chuncheon');
+  chuncheon.classList.toggle('captured',S.caught);chuncheon.classList.toggle('available',!S.caught);
+  chuncheonLabel.classList.toggle('captured',S.caught);chuncheonLabel.classList.toggle('available',!S.caught);
+  if(S.caught){fab.classList.add('got');$('mapStat').textContent='포획 1 / 18';$('pinBody').classList.add('found');}
+  else if(S.totalStamps>=NEED){fab.classList.add('ready');$('mapStat').textContent='춘천 포획 가능';}
+  else $('mapStat').textContent=`춘천 스탬프 ${S.totalStamps} / ${NEED}`;
 
   $('missionList').innerHTML=S.missions.map(m=>{
     const ready=m.cur>=m.target&&!m.got;
@@ -997,7 +1304,9 @@ function sync(){
     $('feedTxt').textContent=S.evolved?'최종 단계 도달 · 시즌 한정 진화를 기대하세요':'먹이를 주면 성장합니다 · 3회 급여 시 진화';
   }
 
-  const cells=S.album.map(a=>`<div class="ph">${ic('i-pin','ic')}<small>${a.n}</small></div>`);
+  const cells=S.album.map((a,i)=>a.photo
+    ?`<button class="ph photo" onclick="openAlbumPhoto(${i})"><img src="${a.photo}" alt="${esc(a.n)}"><small>${esc(a.n)}</small></button>`
+    :`<button class="ph" onclick="openCamera(${i})">${ic('i-pin','ic')}<small>${esc(a.n)}<br>사진 추가</small></button>`);
   while(cells.length<9)cells.push(`<div class="ph empty">${ic('i-camera','ic sm')}</div>`);
   $('albumGrid').innerHTML=cells.join('');
 
@@ -1006,18 +1315,19 @@ function sync(){
   else if(S.caught)gv.disabled=false;
   if(S.paid){$('payBtn').textContent='완료';$('payBtn').disabled=true;$('payTxt').textContent='캐시백 500P 지급 완료';}
 
-  ['finish','night','debut'].forEach(k=>$('bd-'+k).classList.toggle('got',S.badges[k]));
+    ['finish','night','debut'].forEach(k=>$('bd-'+k).classList.toggle('got',S.badges[k]));
   renderRank();
+
+  // 상태 저장
+  localStorage.setItem("gangwondogam", JSON.stringify(S));
 }
 
 /* ===================== 초기화 ===================== */
-let ai=0;
-function rotateAlert(){
-  const a=ALERTS[ai%ALERTS.length];
-  $('alertLabel').textContent=a[0];$('alertTxt').textContent=a[1];ai++;
-}
-rotateAlert();setInterval(rotateAlert,5200);
-renderStarPick();renderFeed();sync();
+updateLiveClock();setInterval(updateLiveClock,1000);
+syncTimeMode();setInterval(()=>syncTimeMode(true),60000);
+renderStarPick();renderFeed();sync();updateLocationUI();fetchWeather();restoreLocationPermission();
+setInterval(()=>fetchWeather(),WEATHER_REFRESH_MS);
+window.addEventListener('online',()=>fetchWeather(true));
 </script>
 </body>
 </html>
